@@ -1,0 +1,41 @@
+---
+components:
+  schemas:
+    User:
+      required:
+        - _id
+        - name
+      properties:
+        _id:
+          type: string
+          example: '000000000000000000000000'
+        name:
+          type: string
+          example: 'alice'
+        avatarUrl:
+          type: string
+          example: 'https://1.bp.blogspot.com/-LFh4mfdjPSQ/VCIiwe10YhI/AAAAAAAAme0/J5m8xVexqqM/s800/animal_neko.png'
+    Users:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+    Error:
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          example: 'BadRequest'
+  responses:
+    BadRequest:
+      description: Bad request error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not found error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

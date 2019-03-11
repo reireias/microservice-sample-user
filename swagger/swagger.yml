@@ -1,0 +1,249 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  description: User service.
+servers:
+  - url: /v1
+paths:
+  '/users/{id}/follows':
+    get:
+      description: Returns follow user list.
+      tags:
+        - follows
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID.
+          schema:
+            type: string
+          example: '000000000000000000000000'
+      responses:
+        '200':
+          description: A JSON array of users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    post:
+      description: Follow a user.
+      tags:
+        - follows
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID.
+          schema:
+            type: string
+          example: '000000000000000000000000'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                followId:
+                  type: string
+                  example: '000000000000000000000001'
+              required:
+                - followId
+      responses:
+        '200':
+          description: Empty body.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    delete:
+      description: Unfollow a user.
+      tags:
+        - follows
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID.
+          schema:
+            type: string
+          example: '000000000000000000000000'
+        - name: followId
+          in: query
+          required: true
+          description: Unfollow target user ID.
+          schema:
+            type: string
+          example: '000000000000000000000001'
+      responses:
+        '200':
+          description: Empty body.
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /users:
+    get:
+      description: Returns a list of users.
+      tags:
+        - users
+      responses:
+        '200':
+          description: A JSON array of users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+    post:
+      description: Create a user.
+      tags:
+        - users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: alice
+                avatarUrl:
+                  type: string
+                  example: >-
+                    https://1.bp.blogspot.com/-LFh4mfdjPSQ/VCIiwe10YhI/AAAAAAAAme0/J5m8xVexqqM/s800/animal_neko.png
+              required:
+                - name
+                - avatarUrl
+      responses:
+        '200':
+          description: Created user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  '/users/{id}':
+    get:
+      description: Find user by ID.
+      tags:
+        - users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID.
+          schema:
+            type: string
+          example: '000000000000000000000000'
+      responses:
+        '200':
+          description: A JSON object of user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      description: Update a user or create a user if user not exist.
+      tags:
+        - users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID.
+          schema:
+            type: string
+          example: '000000000000000000000000'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: alice
+                avatarUrl:
+                  type: string
+                  example: >-
+                    https://1.bp.blogspot.com/-LFh4mfdjPSQ/VCIiwe10YhI/AAAAAAAAme0/J5m8xVexqqM/s800/animal_neko.png
+              required:
+                - name
+                - avatarUrl
+      responses:
+        '200':
+          description: Updated or created user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      description: Delete a user.
+      tags:
+        - users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID.
+          schema:
+            type: string
+          example: '000000000000000000000000'
+      responses:
+        '200':
+          description: Empty body.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    User:
+      required:
+        - _id
+        - name
+      properties:
+        _id:
+          type: string
+          example: '000000000000000000000000'
+        name:
+          type: string
+          example: alice
+        avatarUrl:
+          type: string
+          example: >-
+            https://1.bp.blogspot.com/-LFh4mfdjPSQ/VCIiwe10YhI/AAAAAAAAme0/J5m8xVexqqM/s800/animal_neko.png
+    Users:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+    Error:
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          example: BadRequest
+  responses:
+    BadRequest:
+      description: Bad request error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not found error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+tags: []
