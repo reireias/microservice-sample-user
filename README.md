@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/reireias/microservice-sample-user.svg?branch=master)](https://travis-ci.org/reireias/microservice-sample-user)
 # Microservice Sample User Service
 User service for microservice sample application.
 
