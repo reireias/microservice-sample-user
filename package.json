@@ -41,6 +41,6 @@
     "mongodb": "^3.1.13",
     "mongoose": "^5.4.18",
     "morgan": "^1.9.1",
-    "swagger-jsdoc": "^3.2.7"
+    "swagger-jsdoc": "^3.2.9"
   }
 }
